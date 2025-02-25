@@ -279,11 +279,37 @@ public:
 - 注意重复的也要
 - map<string vector<string>>
 - 排完序当key,原值放value中
-### 34、
-### 35、
-### 36、
-### 37、
-### 38、
+### 34、跳跃游戏
+1. 左指针记录当前位置，右指针是最远能到的位置，两指针相遇代表不行
+2. dp: bool f[i] 表示从这个位置能否到末尾，从右往左遍历
+### 35、不同路径
+dp:f[i][j]表示f[0]f[0]到当前位置的路径数量
+### 36、最小路径和
+与35类似,区别在于如何更新（之前都是加1，现在是加位置上面的数字）
+### 37、编辑距离
+```C++
+if (word1[i-1] == word2[j-1]) f[i][j] = f[i-1][j-1]; 
+else f[i][j] = f[i-1][j-1] + 1;
+f[i][j] = min(f[i][j],f[i-1][j] +1);
+f[i][j] = min(f[i][j], f[i][j-1] +1);
+```
+### 38、二叉树展开为链表(不太能理解为什么要备份)
+```C++
+TreeNode* pre;
+void dfs(TreeNode* root) {
+    if(!root) return;
+
+    pre->right = root;
+    pre->left = nullptr;
+
+    TreeNode* left = root->left;
+    TreeNode* right = root->right;
+    
+    pre = root;
+    dfs(left);
+    dfs(right);
+}
+```
 ### 39、
 ### 40、
 ### 41、
