@@ -1,6 +1,17 @@
 ### 1、快慢指针找环
 为什么快指针和慢指针总是会在环中某一点相遇，而不会刚好“跳过”彼此？
 由于快指针每次跳两步，慢指针每次跳一步，快指针实际上比慢指针多走了一步（两步-一步）。每当快指针和慢指针没有相遇时，快指针相当于以慢指针的速度“追”慢指针。
+```C++
+if(!head || !head->next) return false;
+ListNode *fast = head, *low = head;
+while (fast && fast->next) {
+    fast = fast->next;
+    fast = fast->next;
+    low = low->next;
+    if(fast == low ) return true; 
+}
+return false;
+```
 ### 2、两数之和
 1. 排序、左右指针、向中间移动。根据大小关系左指右移或者右指左移。
 2. hash.
@@ -207,7 +218,7 @@ while (i <= right) {
 ```
 ### 25、最小栈
 1. 从零开始，可以注意实现扩展数组
-2. 用两个栈实现，一个正常，另外一个每次装当前数字或者栈顶数字（栈顶数字一定是最小的）
+2. 用两个栈实现，一个正常，另外一个有可能装当前数字（栈顶数字一定是最小的），如果等于栈顶数字也装进去
 ### 26、最大子序和
 - 如果sum > 0，则说明 sum 对结果有增益效果，则 sum 保留并加上当前遍历数字
 - 如果sum <= 0，则说明 sum 对结果无增益效果，需要舍弃，则 sum 直接更新为当前遍历数字
@@ -310,10 +321,60 @@ void dfs(TreeNode* root) {
     dfs(right);
 }
 ```
-### 39、
-### 40、
-### 41、
-### 42、
+### 39、二叉树的层序遍历
+qu不为空就遍历，获取当前size，for遍历输入当前值到vector、输入孩子到qu
+### 40、岛屿数量
+深度搜索，走过的改值，扫描上下左右
+### 41、实现前缀树（Trie）
+26叉树
+```C++
+class Trie {
+private:
+    bool isEnd;
+    Trie* next[26];
+public:
+    Trie() {
+        this->isEnd = false;
+        for (int i= 0;i < 26; i++) {
+            this->next[i] = nullptr;
+        }
+    }
+
+    void insert(string word) {
+        Trie* node = this;
+        for (char c : word) {
+            if (node->next[c - 'a'] == nullptr) node->next[c - 'a'] = new Trie();
+            node = node->next[c - 'a'];
+        }
+        node->isEnd = true;
+    }
+    
+    bool search(string word) {
+        Trie* node = this;
+        for (char c : word) {
+            node = node->next[c - 'a'];
+            if (node == nullptr) {
+                return false;
+            }
+        }
+        return node->isEnd;
+    }
+```
+### 42、输出链表中倒数k的节点及其链表
+```C++
+if (!pHead) return nullptr;
+ListNode *fast = pHead, *slow = pHead;
+while (k--) {
+    if (fast == nullptr) return nullptr;
+    fast = fast->next;
+}
+
+while (fast) {
+    fast = fast->next;
+    slow = slow->next;
+}
+return slow;
+```
 ### 43、
 ### 44、
 ### 45、
