@@ -439,10 +439,48 @@ public:
 ### 52、螺旋矩阵
 1. 方向数组、方向指示变量、访问标志
 2. 下一个数字不合法，更新方向指示变量，每访问一个数字，修正为已访问
-### 53、
-### 54、
-### 55、
-### 56、
+### 53、单词搜索
+别忘了标志已经访问，然后再撤回就行
+### 54、旋转图像
+**方法：**
+1. 辅助二维数组
+2. 先水平翻转，再主对角线翻转
+### 55、搜索二维矩阵 II
+**方法：**
+1. 每一行都用折半查找
+2. Z字查找（从右上角开始判断）
+### 56、每日温度
+1. 两层for循环（超时）
+2. 建立一个stack存下标 !s.empty() && temperatures[i] > temperatures[s.top()]出栈，否则就存i
+### 56、数组中的第K个最大元素
+- 线性时间选择
+```C++
+    int partition(vector<int>& A, int low, int high) {
+        int pivot = A[low];
+        while (low < high) {
+            while (low < high && A[high] >= pivot) {
+                high--;
+            }
+            A[low] = A[high];
+            while (low < high && A[low] <= pivot) {
+                low++;
+            }
+            A[high] = A[low];
+        }
+        A[low] = pivot;
+        return low;  
+    }
+```
+### 57、前 K 个高频元素
+**方法：**
+1. 用map + priority_queue(堆)
+2. 用map + vector<pair<int, int>>存，然后排序
+
+### 58、两两交换链表中的节点
+一个pre一个p，一个temp一个tail
+### 59、K 个一组翻转链表
+1. 写反转整个链表的函数，提供前一个节点和下一个节点和链表本身
+2. 计数，一到k就用反转函数
 
 
 
