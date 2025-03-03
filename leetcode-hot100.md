@@ -482,6 +482,147 @@ public:
 1. 写反转整个链表的函数，提供前一个节点和下一个节点和链表本身
 2. 计数，一到k就用反转函数
 
+### 59、搜索二维矩阵
+1. 采用Z字查找
+2. 一次折半查找（用n映射i和j）
+### 60、旋转数组中的最小数
+- 用mid和high的关系做判定
+- 最小值的
+### 61、打家劫舍
+- dp:不要忘了`ret[1] = max(nums[1], nums[0])`而不是`ret[1] = nums[1]`
+### 62、完全平方数
+方法：
+1. dp
+```C++
+vector<int> ret(n + 1, n + 1);
+ret[0] = 0;
+for (int i = 1; i <= n; i++) {
+    for (int j = 1; j * j <= i; j++) {
+        ret[i] = min(ret[i], ret[i-j*j] + 1);
+    }
+}
+```
+2. 四平方和定理：当且仅当 n ≠ 4^k*(8m+7) 时，n 可以被表示为至多三个正整数的平方和。因此，当 4^k*(8m+7) 时，n 只能被表示为四个正整数的平方和。前一种情况：为1时，n是完全平方数，为2时枚举a，判断n-a^2是不是完全平方数，排除求3。
+### 63、零钱兑换
+```C++
+int len  = coins.size();
+vector<int> ret(amount+1, amount +1);
+ret[0] = 0;
+for (int i=1; i <= amount; i++) {
+    for (int j = 0; j < len; j++) {
+        if (coins[j] <= i) {
+            ret[i] =min(ret[i], ret[i - coins[j]] + 1);
+        }
+    }
+}
+return ret[amount] > amount ? -1 : ret[amount];
+```
+### 64、单词拆分
+```C++
+unordered_set<string> set; //vector没有find函数，并且整个过滤重复单词
+for (string str : wordDict) {
+    set.insert(str);
+}
+vector<bool> dp(s.size() + 1, false);
+dp[0] = true;
+for (int i = 1; i <= s.size(); i++) {
+    for (int j = 0; j < i; j++) {
+        if (dp[j] && set.find(s.substr(j, i - j)) != set.end()) {
+            dp[i] = true;
+            break;
+        }
+    } 
+}
+```
+### 65、最长递增子序列
+1. dp：
+```C++
+int len = nums.size();
+int ret = 1;
+vector<int> dp(len, 1);
+for (int i = 0; i < len; i++) {
+    for (int j = 0; j < i; j++) {
+        if (nums[j] < nums[i]) {
+            dp[i] = max(dp[i], dp[j] + 1);
+            ret = max(ret, dp[i]);
+        }
+    }
+}
+return ret;
+```
+2. 贪心+二分：
+如果 `nums[i]>d[len]` ，则直接加入到 d 数组末尾，并更新 `len=len+1`；
+否则，在 d 数组中二分查找，找到第一个比 `nums[i]` 小的数 `d[k]` ，并更新 `d[k+1]=nums[i]`。
+
+```C++
+int len = 1, n = (int)nums.size();
+if (n == 0) {
+    return 0;
+}
+vector<int> d(n + 1, 0);
+d[len] = nums[0];
+for (int i = 1; i < n; ++i) {
+    if (nums[i] > d[len]) {
+        d[++len] = nums[i];
+    } else {
+        int l = 1, r = len, pos = 0; // 如果找不到说明所有的数都比 nums[i] 大，此时要更新 d[1]，所以这里将 pos 设为 0
+        while (l <= r) {
+            int mid = (l + r) >> 1;
+            if (d[mid] < nums[i]) {
+                pos = mid;
+                l = mid + 1;
+            } else {
+                r = mid - 1;
+            }
+        }
+        d[pos + 1] = nums[i];
+    }
+}
+return len;
+```
+
+### 66、乘积最大子数组
+**两种dp**
+1. 一个minF,一个maxF
+```C++
+long maxF = nums[0], minF = nums[0], ans = nums[0];
+for (int i = 1; i < nums.size(); ++i) {
+    long mx = maxF, mn = minF;
+    maxF = max(mx * nums[i], max((long)nums[i], mn * nums[i]));
+    minF = min(mn * nums[i], min((long)nums[i], mx * nums[i]));
+    ans = max(maxF, ans);
+}
+return ans;
+
+```
+2. 从左往右，从右往左：`example:[2,3,-2,4]`
+```C++
+int product = 1, n = nums.length;
+int max = nums[0];
+
+for(int i = 0;i < n;i++){
+    product *= nums[i];
+    max = Math.max(max, product);
+    if(nums[i] == 0){
+        product = 1;
+    }
+}
+product = 1;
+for(int i = n - 1;i >= 0;i--){
+    product *= nums[i];
+    max = Math.max(max, product);
+    if(nums[i] == 0){
+        product = 1;
+    }
+}
+return max;
+```
+### 67、
+### 68、
+### 69、
+### 70、
+### 71、
+
 
 
 
