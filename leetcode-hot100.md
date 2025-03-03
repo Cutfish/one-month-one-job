@@ -617,11 +617,196 @@ for(int i = n - 1;i >= 0;i--){
 }
 return max;
 ```
-### 67、
-### 68、
-### 69、
-### 70、
-### 71、
+### 67、全排列
+1. 确定一个然后标记，枚举未访问的下一个
+```C++
+void dfs(const vector<int>& nums, int cur) {
+    if (cur >= nums.size()) {
+        ret.push_back(p);
+        return;
+    }
+    for (int i = 0; i <nums.size(); i++) {
+        if (!visited[i]) {
+            visited[i] = true;
+            p[cur] = nums[i];
+            dfs(nums, cur + 1);
+            visited[i] = false;
+        }
+    }
+}
+```
+2. swap(nums[cur], i)
+```C++
+void dfs(vector<int>& nums, int cur) {
+    if (cur >= nums.size()) {
+        ret.push_back(nums);
+        return;
+    }
+    for (int i = cur; i <nums.size(); i++) {
+        swap(nums[i], nums[cur]);
+        dfs(nums, cur + 1);
+        swap(nums[i], nums[cur]);
+    }
+}
+```
+3、下一个排列
+```C++
+sort(nums.begin(), nums.end());
+
+do {
+    ret.push_back(nums);
+
+}while(next_permutation(nums.begin(), nums.end()));
+return ret;
+```
+### 68、子集
+1. 递归，当前元素选或者不选
+```C++
+void dfs(vector<int>& nums, int cur) {
+    if (cur >= nums.size()) {
+        ret.push_back(p);
+        return;
+    }
+    dfs(nums, cur +1);
+    p.push_back(nums[cur]);
+    dfs(nums, cur + 1);
+    p.pop_back();
+}
+```
+### 69、分割回文串
+f[i][j]: i到j是不是回文串
+循环中是dfs(s, i + 1)，不是dfs(s, cur + 1)
+```C++
+vector<vector<bool>> f;
+vector<vector<string>> ret;
+vector<string> ans;
+int n;
+
+void dfs(string s, int cur) {
+    if (cur >= s.size()) {
+        ret.push_back(ans);
+        return;
+    }
+    for (int i = cur; i < s.size(); i++) {
+        if (f[cur][i]) {
+            ans.push_back(s.substr(cur, i - cur + 1));
+            dfs(s, i + 1);
+            ans.pop_back();
+        }
+    }
+} 
+vector<vector<string>> partition(string s) {
+    n = s.size();
+    f.assign(n, vector<bool>(n ,true));
+    for (int i = n-1; i >= 0; i--) {
+        for (int j = i + 1; j < n; j++) {
+            f[i][j] = (f[i + 1][j - 1]) && s[i]== s[j];
+        }
+    }
+    dfs(s, 0);
+    return ret;
+}
+```
+### 70、二叉树的右视图
+层序遍历，queue中的最后一个元素
+### 71、从前序与中序遍历序列构造二叉树
+1. `l1 <= r1`就执行`new TreeNode(preorder[l1])`
+2. 用`auto it = find(inorder.begin(), inorder.end(), preorder[l1])`和`int index = int(it-inorder.begin())`定位
+
+### 72、路径总和 III
+1. 深搜（两次递归，一次是求当前节点往下走有没有，另外一个是整个树的递归）
+```C++
+int rootSum(TreeNode* root, int targetSum) {
+    if (!root) {
+        return 0;
+    }
+
+    int ret = 0;
+    if (root->val == targetSum) {
+        ret++;
+    } 
+
+    ret += rootSum(root->left, targetSum - root->val);
+    ret += rootSum(root->right, targetSum - root->val);
+    return ret;
+}
+
+int pathSum(TreeNode* root, int targetSum) {
+    if (!root) {
+        return 0;
+    }
+    
+    int ret = rootSum(root, targetSum);
+    ret += pathSum(root->left, targetSum);
+    ret += pathSum(root->right, targetSum);
+    return ret;
+}
+
+```
+2. 前缀和
+```C++
+int dfs(TreeNode *root, long long curr, int targetSum) {
+    if (!root) {
+        return 0;
+    }
+
+    int ret = 0;
+    curr += root->val;
+    if (prefix.find(curr - targetSum)!= prefix.end()) {
+        ret = prefix[curr - targetSum];
+    }
+
+    prefix[curr]++;
+    ret += dfs(root->left, curr, targetSum);
+    ret += dfs(root->right, curr, targetSum);
+    prefix[curr]--;
+
+    return ret;
+}
+```
+### 73、二叉树的最近公共祖先
+TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+    if (!root) return nullptr;
+    if (p == root || q == root) return root;
+    TreeNode* left = lowestCommonAncestor(root->left, p, q);
+    TreeNode* right = lowestCommonAncestor(root->right, p, q);
+    if (right && left) return root;
+    if (left) return left;
+    if (right) return right;
+    return nullptr; 
+}
+### 74、二叉树中的最大路径和
+1. 判断左右子树对应值和0的大小关系
+2. 判断当前值+左右子树值
+3. 返回当前值+max(左右子树值)
+### 75、最长公共子序列
+```C++
+if (text1[i-1] == text2[j-1]) {
+    f[i][j] = f[i-1][j-1] + 1;
+}else {
+    f[i][j] = max(f[i-1][j], f[i][j-1]);
+}
+```
+### 76、
+### 77、
+### 78、
+### 79、
+### 80、
+### 81、
+### 82、
+### 83、
+### 84、
+### 85、
+### 86、
+### 87、
+### 88、
+### 89、
+### 90、
+### 91、
+### 92、
+### 93、
+### 94、
+### 95、
 
 
 
