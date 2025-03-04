@@ -787,13 +787,242 @@ if (text1[i-1] == text2[j-1]) {
     f[i][j] = max(f[i-1][j], f[i][j-1]);
 }
 ```
-### 76、
-### 77、
-### 78、
-### 79、
-### 80、
-### 81、
-### 82、
+### 76、接雨水
+max_left记录l往右边走的时走的最高的柱子，max_left-l就是答案
+```C++
+int max_left = 0;
+int max_right = 0;
+int l = 0, r = height.size()-1;
+while (l < r) {
+    max_left = max(max_left, height[l]);
+    max_right = max(max_right, height[r]);
+    if (height[l] < height[r]) {
+        ans += max_left - height[l];
+        l++;
+    }else {
+        ans +=max_right - height[r];
+        r--;
+    }
+}
+return ans;
+```
+### 77、滑动窗口最大值
+1. 优先队列pq<pair<int, int>>（nums[i],i）：先将前k个值放进去，往下再走的时候，先push，然后对于top()元素检查，如果top().second <= i-k，出队列，然后拿当前top()元素入ret
+2. 只用一个队列存index，如果`!q.empty() && nums[i] >= nums[q.back()]`一直`pop`，这样保证q.front一直是最大的。`while (qu.front() <= i - k) {qu.pop_front();}`在这个保证当前的front是有效的
+### 78、复制带随机指针的链表
+1. hash记录当前节点是否存在，不存在就创建新的并记录
+```C++
+Node* copyRandomList(Node* head) {
+    // if (!head) return nullptr;
+    // if (hashmap.find(head) == hashmap.end()) {
+    //     Node* newHead = new Node(head->val);
+    //     hashmap[head] = newHead;
+    //     newHead->next = copyRandomList(head->next);
+    //     newHead->random = copyRandomList(head->random);
+    // }
+    // return hashmap[head];
+    //或者
+    unordered_map<Node*,Node*>hmap;
+    Node* copyRandomList(Node* head) {
+        Node *p=head;
+        while(p){
+			hmap.insert({p,new Node(p->val)});
+            p=p->next;
+		}
+		p=head;
+		while(p){
+			hmap[p]->next=hmap[p->next];
+			hmap[p]->random=hmap[p->random];
+            p=p->next;
+		}
+		return hmap[head];
+    }
+}
+
+```
+2. 
+- 拷贝前一个结点，n-->2n
+- 设置random节点
+- 分离链表
+```C++
+
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        if (head == nullptr) {
+            return nullptr;
+        }
+        for (Node* node = head; node != nullptr; node = node->next->next) {
+            Node* nodeNew = new Node(node->val);
+            nodeNew->next = node->next;
+            node->next = nodeNew;
+        }
+        for (Node* node = head; node != nullptr; node = node->next->next) {
+            Node* nodeNew = node->next;
+            nodeNew->random = (node->random != nullptr) ? node->random->next : nullptr;
+        }
+        Node* headNew = head->next;
+        for (Node* node = head; node != nullptr; node = node->next) {
+            Node* nodeNew = node->next;
+            node->next = node->next->next;
+            nodeNew->next = (nodeNew->next != nullptr) ? nodeNew->next->next : nullptr;
+        }
+        return headNew;
+    }
+};
+```
+### 79、课程表
+**邻接表+拓扑排序**
+```C++
+bool canFinish(int numCourses, vector<vector<int>>& pre) {
+    vector<vector<int>> edges;
+    vector<int> indeg;
+    edges.resize(numCourses);
+    indeg.resize(numCourses);
+    for (int i = 0; i <pre.size(); i++ ) {
+        edges[pre[i][1]].push_back(pre[i][0]);
+        indeg[pre[i][0]]++;
+    }
+    queue<int> qu;
+    for (int i = 0; i < numCourses;i++) {
+        if (indeg[i] == 0) qu.push(i);
+    }
+    int count =0 ;
+    while(!qu.empty()) {
+        count++;
+        int p = qu.front();
+        qu.pop();
+        for (int i : edges[p]) {
+            indeg[i]--;
+            if (indeg[i] == 0) qu.push(i);
+        }
+    }
+
+    return count == numCourses;
+
+}
+```
+### 80、烂橘子
+- 多源广搜
+- 烂橘子入队、统计新鲜橘子
+- `freshCount>0 && !q.empty()` 就遍历四个方向，更新time、count，有新的烂橘子就入队
+- `freshCount`符不符合要求
+```C++
+int orangesRotting(vector<vector<int>>& grid) {
+    int m = grid.size();       // 行数
+    int n = grid[0].size();    // 列数
+    queue<pair<int, int>> q;   // BFS 队列
+    int freshCount = 0;        // 统计新鲜橘子数量
+
+    // 遍历网格，记录初始腐烂橘子的位置，并统计新鲜橘子数量
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (grid[i][j] == 2) {
+                q.push({i, j}); // 将腐烂橘子入队
+            } else if (grid[i][j] == 1) {
+                freshCount++;   // 统计新鲜橘子数量
+            }
+        }
+    }
+
+    // 如果没有新鲜橘子，直接返回 0
+    if (freshCount == 0) return 0;
+
+    int time = 0;              // 记录腐烂所需时间
+    vector<vector<int>> dir = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}}; // 方向数组
+
+    // BFS 遍历
+    while (freshCount>0 && !q.empty()) {
+        int size = q.size();
+        // 如果有橘子腐烂，时间加 1
+        time++;
+
+        for (int i = 0; i < size; i++) {
+            auto [x, y] = q.front();
+            q.pop();
+
+            // 遍历四个方向
+            for (const auto& d : dir) {
+                int xNext = x + d[0];
+                int yNext = y + d[1];
+
+                // 检查边界和是否为新鲜橘子
+                if (xNext >= 0 && yNext >= 0 && xNext < m && yNext < n && grid[xNext][yNext] == 1) {
+                    grid[xNext][yNext] = 2;  // 腐烂新鲜橘子
+                    q.push({xNext, yNext});  // 将新的腐烂橘子加入队列
+                    freshCount--;            // 新鲜橘子数量减少
+                }
+            }
+        }
+
+
+    }
+
+    // 如果还有新鲜橘子，返回 -1，否则返回腐烂所需的时间
+    return freshCount == 0 ? time : -1;
+}
+```
+### 81、八皇后
+```C++
+class Solution {
+public:
+    vector<vector<string>> ret;
+    bool isValid(const vector<string>& chessboard, int row, int column, int n) {
+        for (int i = 0; i < n;i++) {
+            if(chessboard[row][i] == 'Q' || chessboard[i][column] == 'Q') return false;
+        }
+        // 检查左上主对角线 (\ 方向)
+        for (int i = row - 1, j = column - 1; i >= 0 && j >= 0; i--, j--) {
+            if (chessboard[i][j] == 'Q') return false;
+        }
+
+        // 检查右上副对角线 (/ 方向)
+        for (int i = row - 1, j = column + 1; i >= 0 && j < n; i--, j++) {
+            if (chessboard[i][j] == 'Q') return false;
+        }
+        return true;
+        
+    }
+    void dfs(vector<string>& chessboard, int n, int row) {
+        if (row==n) {
+            ret.push_back(chessboard);
+            return;
+        }
+        for (int i = 0; i < n;i++) {
+            if(isValid(chessboard, row,i,n)) {
+                chessboard[row][i] = 'Q';
+                dfs(chessboard, n, row+1);
+                chessboard[row][i] = '.';
+            }
+        }
+    }
+    vector<vector<string>> solveNQueens(int n) {
+        vector<string> chessboard(n, string(n,'.'));
+        dfs(chessboard, n, 0);
+        return ret;
+    }
+};
+```
+### 82、划分字母区间
+```C++
+vector<int> partitionLabels(string s) {
+    int last[26];
+    int length = s.size();
+    for (int i = 0; i < length; i++) {
+        last[s[i] - 'a'] = i;
+    }
+    vector<int> partition;
+    int start = 0, end = 0;
+    for (int i = 0; i < length; i++) {
+        end = max(end, last[s[i] - 'a']);
+        if (i == end) {
+            partition.push_back(end - start + 1);
+            start = end + 1;
+        }
+    }
+    return partition;
+}
+```
 ### 83、
 ### 84、
 ### 85、
