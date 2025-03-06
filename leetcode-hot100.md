@@ -1023,19 +1023,223 @@ vector<int> partitionLabels(string s) {
     return partition;
 }
 ```
-### 83、
-### 84、
-### 85、
-### 86、
-### 87、
-### 88、
-### 89、
-### 90、
-### 91、
-### 92、
-### 93、
-### 94、
-### 95、
+### 83、最小覆盖子串
+```C++
+unordered_map<char, int> need, window;
+
+string minWindow(string s, string t) {
+    for(char c : t) {
+        need[c]++;
+    }
+    string ans;
+    for (int i = 0,j = 0,count = 0; i < s.size(); i++) {
+        if(++window[s[i]] <= need[s[i]]) count++;
+        while (window[s[j]] > need[s[j]]) window[s[j++]]--;
+        if (count == t.size()) {
+            if (ans.empty() || ans.size() > i - j + 1) {
+                ans = s.substr(j, i-j+1);
+            }
+        }
+    }
+    return ans;
+}
+```
+### 84、合并链表
+```C++
+class Solution {
+public:
+    ListNode* merge(ListNode* head1, ListNode* head2) {
+        ListNode* newHead = new ListNode(0);
+        ListNode* p1 = head1, *p2 = head2, *p = newHead;
+        while (p1 && p2) {
+            if (p1->val < p2->val) {
+                p->next = p1;
+                p1 = p1->next;
+            }else {
+                p->next = p2;
+                p2 = p2->next;
+            }
+            p = p->next;
+        }
+        if(p1) p->next = p1;
+        if(p2) p->next = p2;
+        return newHead->next;
+    }
+    ListNode* sortList(ListNode* head) {
+        if (head == nullptr) return head;
+        int len = 0;
+        for (ListNode* p = head; p;p = p->next) len++;
+
+        ListNode* newHead = new ListNode(0);
+        newHead->next = head;
+
+        for (int i = 1;i < len;i *= 2) {
+            ListNode* pre = newHead, *cur = newHead->next;
+            while (cur) {
+                ListNode *head1 = cur;
+                for (int j = 1; j < i && cur->next; j++) {
+                    cur = cur->next;
+                }
+
+                ListNode * head2 = cur->next;
+                cur->next = nullptr;
+                cur = head2;
+
+                for (int j = 1; j < i && cur && cur->next; j++) {
+                    cur = cur->next;
+                }
+                ListNode *next = nullptr;
+                if (cur) {
+                    next = cur->next;
+                    cur->next = nullptr;
+                }
+
+                ListNode* merged = merge(head1, head2);
+                pre->next = merged;
+                while (pre->next) {
+                    pre = pre->next;
+                }
+                cur = next;
+            }
+        }
+        return newHead->next;
+    }
+};
+```
+### 85、跳跃游戏II
+```C++
+int jump(vector<int>& nums) {
+    if(nums.size() == 1) return 0;
+    int cur = 0, next = 0, ret = 0;
+    for (int i = 0; i < nums.size() - 1; i++) {
+        next = max(next, i+ nums[i]);
+        if (i == cur) {
+            ret++;
+            cur = next;
+        }
+    }
+    return ret;
+}
+```
+
+### 86、单词拆分
+```C++
+bool wordBreak(string s, vector<string>& wordDict) {
+    int len = s.size();
+    vector<bool> dp(len + 1, false);
+    dp[0] = true;
+    
+    for (int i = 1; i <= len;i++) {
+        for (string str : wordDict) {
+            int str_size = str.size();
+            if (i + str_size-1 <= len && s.substr(i-1, str_size) == str && dp[i-1]) {
+                dp[i-1 + str_size] = true;
+            }
+        }
+    }
+
+    return dp[len];
+}
+```
+### 87、数据流的中位数
+```C++
+void addNum(int num) {
+    if (queMin.empty() || num <= queMin.top()) {
+        queMin.push(num);
+        if (queMax.size() + 1 < queMin.size()) {
+            queMax.push(queMin.top());
+            queMin.pop();
+        }
+    } else {
+        queMax.push(num);
+        if (queMax.size() - 1 > queMin.size()) {
+            queMin.push(queMax.top());
+            queMax.pop();
+        }
+    }
+}
+
+double findMedian() {
+    if (queMax.size() > queMin.size()) return queMax.top();
+    else if (queMax.size() < queMin.size()) return queMin.top();
+    else return (queMax.top() + queMin.top()) / 2.0;
+}
+```
+### 88、分割等和子集
+1. 二维数组
+```C++
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        int n = nums.size();
+        if (n < 2) {
+            return false;
+        }
+        int sum = accumulate(nums.begin(), nums.end(), 0);
+        int maxNum = *max_element(nums.begin(), nums.end());
+        if (sum & 1) {
+            return false;
+        }
+        int target = sum / 2;
+        if (maxNum > target) {
+            return false;
+        }
+        vector<vector<int>> dp(n, vector<int>(target + 1, 0));
+        for (int i = 0; i < n; i++) {
+            dp[i][0] = true;
+        }
+        dp[0][nums[0]] = true;
+        for (int i = 1; i < n; i++) {
+            int num = nums[i];
+            for (int j = 1; j <= target; j++) {
+                if (j >= num) {
+                    dp[i][j] = dp[i - 1][j] | dp[i - 1][j - num];
+                } else {
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+        return dp[n - 1][target];
+    }
+};
+
+
+```
+2. 
+```C++
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        int n = nums.size();
+        if (n < 2) {
+            return false;
+        }
+        int sum = 0, maxNum = 0;
+        for (auto& num : nums) {
+            sum += num;
+            maxNum = max(maxNum, num);
+        }
+        if (sum & 1) {
+            return false;
+        }
+        int target = sum / 2;
+        if (maxNum > target) {
+            return false;
+        }
+        vector<int> dp(target + 1, 0);
+        dp[0] = true;
+        for (int i = 0; i < n; i++) {
+            int num = nums[i];
+            for (int j = target; j >= num; --j) {
+                dp[j] |= dp[j - num];
+            }
+        }
+        return dp[target];
+    }
+};
+
+```
+
 
 
 
