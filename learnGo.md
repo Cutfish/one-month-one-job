@@ -33,4 +33,8 @@ func main() {
 
 }
 ```
+**Context**
+`ctx, cancel := context.WithCancel(context.Background())`
+context.Backgroud() 创建根 Context，通常在 main 函数、初始化和测试代码中创建，作为顶层 Context。
+context.WithCancel(parent) 创建可取消的子 Context，同时返回函数 cancel。
 
