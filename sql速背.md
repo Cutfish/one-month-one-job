@@ -1,3 +1,4 @@
+### 全部流程
 ```sql
 -- 1. 创建一个用户表
 CREATE TABLE users (
@@ -76,3 +77,7 @@ FROM (SELECT u.username, SUM(o.amount) AS total_spent
 WHERE total_spent = (SELECT MAX(SUM(amount)) FROM orders GROUP BY user_id);
 
 ```
+### 杂糅知识
+1. BETWEEN...AND...全都是闭区间
+2. IFNULL(a, b) ：如果a是null，那么就是b的值（常用于左右连接）
+3. ROUND(a, 2)保留两位小数
