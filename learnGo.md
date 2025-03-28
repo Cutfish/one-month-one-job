@@ -38,3 +38,9 @@ func main() {
 context.Backgroud() 创建根 Context，通常在 main 函数、初始化和测试代码中创建，作为顶层 Context。
 context.WithCancel(parent) 创建可取消的子 Context，同时返回函数 cancel。
 
+**map**
+根据hash计算分配到哪个桶（其实是根据桶的数量取hash低位进行分配），检测topash中是否有hash的高八位相等的（减少计算量），没有的话就去溢出桶
+
+**GC**
+三色标记法+写屏障
+后者其实就是检测是否有对象的指针发生了变化
