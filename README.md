@@ -22,4 +22,5 @@
 2. B站：胡-毛毛（golang-guide。总结golang面经，很全，很详细）（https://space.bilibili.com/289144374?spm_id_from=333.337.search-card.all.click）
 3. B站：幼麒麟实验室（讲解golang底层原理）（https://space.bilibili.com/567195437?spm_id_from=333.337.search-card.all.click）
 4. 极客兔兔（只有博客，golang及其框架使用、手搓轮子项目）（https://geektutu.com/）
+5. 黑马程序员（java八股，但是有通用的可以看，内容很少，适合快速突破）（https://www.bilibili.com/video/BV1yT411H7YK/?spm_id_from=333.337.top_right_bar_window_custom_collection.content.click）
 # 2.20开始准备，4.1开始投简历，陆陆续续面了十几场（含二面），小到不足百人公司，大到百度、特斯拉等，5.9合合信息OC，感觉还不错，就是那边房租贵
