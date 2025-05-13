@@ -289,7 +289,7 @@ a+b = 0总之类型溢出会出现难以意料的事
 ### **能介绍下 rune 类型吗？**
 相当int32  
 golang中的字符串底层实现是通过byte数组的，中文字符在unicode下占2个字节，在utf-8编码下占3个字节，而golang默认编码正好是utf-8  
-byte 等同于int8，常用来处理ascii字符  
+byte 等同于uint8，常用来处理ascii字符  
 rune 等同于int32,常用来处理unicode或utf-8字符  
 ![](https://cdn.nlark.com/yuque/0/2022/png/22219483/1659259378747-48538a44-1ccb-47ac-9492-0b569d219e2b.png#averageHue=%23fcfafa&clientId=ube5f509c-2a72-4&errorMessage=unknown%20error&from=paste&id=u310184ba&originHeight=421&originWidth=720&originalType=url&ratio=1&rotation=0&showTitle=false&size=155056&status=error&style=none&taskId=u05214bff-6a88-483d-b9a3-664bd069a40&title=)
 
