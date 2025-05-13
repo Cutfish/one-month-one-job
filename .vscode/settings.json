@@ -1,6 +1,0 @@
-{
-    "files.associations": {
-        "*.proto": "cpp",
-        "iostream": "cpp"
-    }
-}
