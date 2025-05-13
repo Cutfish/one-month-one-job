@@ -1,4 +1,22 @@
-# 部分内容来自其他博主，侵权删
+# 部分内容来自其他博主，侵权删。
+# 内容介绍
+重点是：面试整理、面经问答、golang八股、25届秋招面经（98份）、方便背
+1. golang八股图片版：某位牛客大佬总结，内容比较精炼
+2. **25届秋招面经（98份）**：golang面经
+3. golang+后端开发八股：golang和通用八股
+4. **golang八股**：golang-guide里的golang八股，我有删改增部分内容
+5. learnGo：一点点知识点
+6. leetcode-hot100：自己刷的一百题的笔记
+7. sql速背：ai生成，快速上手sql
+8. 二刷hot100：二刷笔记
+9. 小红书面经：自己牛客帖子总结的
+10. **方便背**：精炼golang-guide的计网和操作系统，适合快速回忆
+11. 日记：一个月的笔记，后面开始面试就懒得记了
+12. 每日一问：一点点东西
+13. 知识杂记：一点点东西
+14. **面经问答**：自己总结牛客相关golang帖子
+15. **面试整理**：自己一个多月的面试记录
+16. 项目分析：自己的项目的一点分析（方便背）
 # 推荐博主/网页
 1. B站：老周聊golang（讲解和总结golang/云原生面经）（https://space.bilibili.com/646640992?spm_id_from=333.337.search-card.all.click）
 2. B站：胡-毛毛（golang-guide。总结golang面经，很全，很详细）（https://space.bilibili.com/289144374?spm_id_from=333.337.search-card.all.click）
